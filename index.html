@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Código de la Congelación — Hackea tu Peso sin Cocinar Diario</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==========================================================================
+           DESIGN SYSTEM & VARIABLES
+           ========================================================================== */
+
+        :root {
+            /* Fonts */
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+
+            /* Transition speeds */
+            --transition-fast: 0.2s ease;
+            --transition-normal: 0.3s ease;
+
+            /* Theme colors - Dark Mode Default */
+            --bg-primary: #070b13;
+            --bg-secondary: #0f1626;
+            --bg-tertiary: #172037;
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --neon-cyan: #00f2fe;
+            --neon-blue: #4facfe;
+            --coral: #ff5858;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glow-shadow: 0 0 25px rgba(0, 242, 254, 0.15);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            
+            /* Layout widths */
+            --sidebar-width: 280px;
+            --content-max-width: 800px;
+        }
+
+        /* Light Mode Variables Override */
+        body.light-mode {
+            --bg-primary: #f4f7f9;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e9eff4;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --neon-cyan: #0284c7;
+            --neon-blue: #0369a1;
+            --coral: #e11d48;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --glow-shadow: 0 10px 25px rgba(2, 132, 199, 0.1);
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* ==========================================================================
+           BASE STYLES & RESET
+           ========================================================================== */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            transition: background-color var(--transition-normal), color var(--transition-normal);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.25;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        a {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        a:hover {
+            color: var(--neon-blue);
+        }
+
+        blockquote {
+            border-left: 4px solid var(--neon-cyan);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background: var(--bg-tertiary);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        /* ==========================================================================
+           PROGRESS BAR & HEADER
+           ========================================================================== */
+
+        #progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
+            box-shadow: 0 0 8px var(--neon-cyan);
+            transition: width 0.1s ease-out;
+        }
+
+        .main-header {
+            position: fixed;
+            top: 4px;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(var(--bg-secondary), 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 900;
+        }
+
+        body.dark-mode .main-header {
+            background: rgba(15, 22, 38, 0.8);
+        }
+        body.light-mode .main-header {
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 1.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        .logo span span {
+            color: var(--neon-cyan);
+        }
+
+        .frost-icon-animate {
+            color: var(--neon-cyan);
+            animation: rotateFrost 15s linear infinite;
+        }
+
+        @keyframes rotateFrost {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        button {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            background: var(--border-color);
+            border-color: var(--text-secondary);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+            color: #070b13 !important;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 242, 254, 0.4);
+            opacity: 0.95;
+        }
+
+        /* ==========================================================================
+           NAVIGATION SIDEBAR
+           ========================================================================== */
+
+        .sidebar {
+            position: fixed;
+            top: 74px;
+            left: -280px;
+            width: var(--sidebar-width);
+            height: calc(100vh - 74px);
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: left var(--transition-normal);
+            z-index: 850;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        #close-sidebar-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--neon-cyan);
+            background: var(--bg-tertiary);
+            padding-left: 1.25rem;
+        }
+
+        .sidebar-footer {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           CONTENT LAYOUT & PAGES
+           ========================================================================== */
+
+        .content-container {
+            max-width: var(--content-max-width);
+            margin: 100px auto 4rem auto;
+            padding: 0 1.5rem;
+            transition: margin-left var(--transition-normal);
+        }
+
+        @media (min-width: 1200px) {
+            .sidebar {
+                left: 0;
+            }
+            #toggle-sidebar-btn, #close-sidebar-btn {
+                display: none;
+            }
+            .content-container {
+                margin-left: calc(var(--sidebar-width) + (100vw - var(--sidebar-width) - var(--content-max-width)) / 2);
+            }
+        }
+
+        .ebook-page {
+            margin-bottom: 6rem;
+            scroll-margin-top: 100px;
+        }
+
+        /* ==========================================================================
+           PORTADA / COVER DESIGN
+           ========================================================================== */
+
+        .cover-section {
+            position: relative;
+            min-height: calc(85vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 3rem;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .cover-glow-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(79, 172, 254, 0.03) 50%, transparent 70%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 650px;
+        }
+
+        .cover-subtitle {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .highlight-text {
+            background: linear-gradient(135deg, var(--neon-cyan) 0%, var(--neon-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cover-tagline {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        .cover-meta {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .author {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0;
+        }
+
+        .guide-note {
+            margin-bottom: 0;
+        }
+
+        .cover-illustration-fallback {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ice-portal {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portal-ring {
+            position: absolute;
+            border: 2px solid var(--neon-cyan);
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: rotatePortal 20s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.1);
+        }
+
+        .ring-2 {
+            width: 80%;
+            height: 80%;
+            border-color: var(--neon-blue);
+            animation-duration: 12s;
+            animation-direction: reverse;
+        }
+
+        .ring-3 {
+            width: 60%;
+            height: 60%;
+            border-color: var(--coral);
+            animation-duration: 8s;
+        }
+
+        .portal-core {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.6);
+        }
+
+        .core-frost {
+            font-size: 1.2rem;
+            color: #070b13;
+            animation: pulseCore 2s ease-in-out infinite;
+        }
+
+        @keyframes rotatePortal {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseCore {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* ==========================================================================
+           CHAPTER DESIGNS
+           ========================================================================== */
+
+        .chapter-header {
+            border-bottom: 2px solid var(--neon-cyan);
+            padding-bottom: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .chapter-number {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            color: var(--neon-cyan);
+        }
+
+        .chapter-title {
+            font-size: 2.2rem;
+            margin-top: 0.3rem;
+            color: var(--text-primary);
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--neon-cyan);
+            margin-bottom: 2rem;
+        }
+
+        /* Cards & Info Blocks */
+        .info-card {
+            display: flex;
+            gap: 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--card-shadow);
+        }
+
+        .info-card-icon {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .info-card-content h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.15rem;
+        }
+
+        .info-card-content p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .warning-card {
+            border-left: 4px solid var(--coral);
+        }
+
+        .warning-card .info-card-icon {
+            color: var(--coral);
+        }
+
+        /* Lists and steps */
+        .science-list {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .science-list li {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .science-list li i {
+            position: absolute;
+            left: 0.25rem;
+            top: 0.25rem;
+            font-size: 1.25rem;
+            color: var(--neon-cyan);
+        }
+
+        .steps-list {
+            list-style: none;
+            counter-reset: steps-counter;
+            margin: 2rem 0;
+        }
+
+        .steps-list li {
+            counter-increment: steps-counter;
+            position: relative;
+            padding-left: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .steps-list li::before {
+            content: counter(steps-counter);
+            position: absolute;
+            left: 0;
+            top: 0.1rem;
+            width: 2.2rem;
+            height: 2.2rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 50%;
+            color: var(--neon-cyan);
+            font-weight: 700;
+            font-family: var(--font-heading);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 3rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-badge {
+            position: absolute;
+            left: -2rem;
+            top: 0;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-blue));
+            color: #070b13;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+        }
+
+        .timeline-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .timeline-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--neon-cyan);
+        }
+
+        .timeline-content p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        /* ==========================================================================
+           TABLES & DIAGRAMS
+           ========================================================================== */
+
+        .table-container {
+            overflow-x: auto;
+            margin: 2.5rem 0;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            background: var(--bg-secondary);
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--bg-tertiary);
+            font-family: var(--font-heading);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight-green {
+            color: #10b981;
+        }
+
+        .highlight-red {
+            color: #ef4444;
+        }
+
+        .diagram-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .science-svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .svg-text {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 14px;
+            fill: var(--text-primary);
+        }
+
+        .svg-text.highlight {
+            fill: var(--neon-cyan);
+        }
+
+        .svg-text-sub {
+            font-family: var(--font-body);
+            font-size: 11px;
+            fill: var(--text-secondary);
+        }
+
+        /* Grid Layouts */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2.5rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .grid-3 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .grid-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-fast);
+        }
+
+        .grid-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .grid-card-icon {
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1rem;
+        }
+
+        .grid-card h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .grid-card p {
+            margin-bottom: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* ==========================================================================
+           INTERACTIVE CALCULATOR WIDGET
+           ========================================================================== */
+
+        .widget-section {
+            scroll-margin-top: 100px;
+        }
+
+        .widget-container {
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(23, 32, 55, 0.4) 100%);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: var(--glow-shadow);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 4rem 0;
+        }
+
+        .widget-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .calculator-icon {
+            font-size: 2.5rem;
+            color: var(--neon-cyan);
+            margin-bottom: 0.75rem;
+        }
+
+        .widget-header h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .widget-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .widget-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .widget-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color var(--transition-fast);
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--neon-cyan);
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .widget-results {
+            background: rgba(7, 11, 19, 0.6);
+            border: 1px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 250px;
+        }
+
+        .result-placeholder {
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .result-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .result-placeholder p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        .results-content h4 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .calories-badge {
+            background: linear-gradient(135deg, rgba(0, 242, 254, 0.1) 0%, rgba(79, 172, 254, 0.05) 100%);
+            border: 1px solid var(--neon-cyan);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .badge-label {
+            display: block;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--neon-cyan);
+            margin-bottom: 0.25rem;
+        }
+
+        .badge-value {
+            font-family: var(--font-heading);
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--text-primary);
+        }
+
+        .macro-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .macro-bar-item {
+            font-size: 0.9rem;
+        }
+
+        .macro-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .bar-outer {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-inner {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.8s ease-out;
+        }
+
+        .protein-bar { background: var(--coral); }
+        .carb-bar { background: #a78bfa; }
+        .fat-bar { background: var(--neon-cyan); }
+
+        .prep-guide-box {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .prep-guide-box h5 {
+            color: var(--neon-cyan);
+            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
+        }
+
+        .prep-guide-box p {
+            margin-bottom: 0;
+            color: var(--text-secondary);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Promo Box */
+        .final-book-promo {
+            background: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
+            border-radius: 15px;
+            padding: 2.5rem;
+            text-align: center;
+            margin: 4rem 0 2rem 0;
+            box-shadow: 0 10px 25px rgba(127, 0, 255, 0.25);
+        }
+
+        .promo-content h3 {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .promo-content p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0;
+            font-size: 1.05rem;
+        }
+
+        .signature {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-style: italic;
+            color: var(--neon-cyan);
+            margin-top: 2rem;
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           PDF SIMULATOR / PREVIEW MODE STYLES
+           ========================================================================== */
+
+        body.pdf-preview-mode {
+            background: #cbd5e1;
+            color: #1e293b;
+            padding-top: 90px;
+        }
+
+        body.pdf-preview-mode .main-header {
+            background: #1e293b;
+            border-color: #334155;
+        }
+
+        body.pdf-preview-mode .main-header .logo,
+        body.pdf-preview-mode .main-header .logo span {
+            color: #ffffff;
+        }
+
+        body.pdf-preview-mode .content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0;
+            background: transparent;
+        }
+
+        body.pdf-preview-mode .ebook-page {
+            background: #ffffff;
+            width: 100%;
+            min-height: 1120px;
+            padding: 3.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 0;
+            position: relative;
+            border: 1px solid #94a3b8;
+        }
+
+        body.pdf-preview-mode .no-print,
+        body.pdf-preview-mode .sidebar {
+            display: none !important;
+        }
+
+        body.pdf-preview-mode .content-container {
+            margin-left: auto !important;
+        }
+
+        body.pdf-preview-mode .only-print {
+            display: block !important;
+        }
+
+        body.pdf-preview-mode .print-footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 3.5rem;
+            right: 3.5rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* ==========================================================================
+           PRINT MEDIA RULES (TRIGGERED BY window.print())
+           ========================================================================== */
+
+        .only-print {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 2cm;
+            }
+            
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 11pt !important;
+                line-height: 1.6 !important;
+            }
+            
+            .content-container {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+            }
+            
+            .no-print, 
+            #progress-container,
+            .main-header,
+            .sidebar,
+            .final-book-promo {
+                display: none !important;
+            }
+            
+            .ebook-page {
+                page-break-after: always;
+                page-break-inside: avoid;
+                margin-bottom: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                min-height: auto !important;
+                background: transparent !important;
+            }
+            
+            .ebook-page:last-of-type {
+                page-break-after: avoid;
+            }
+            
+            .cover-section {
+                height: 100vh !important;
+                min-height: 100vh !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                border: none !important;
+                background: transparent !important;
+                page-break-inside: avoid !important;
+            }
+            
+            .cover-title {
+                font-size: 32pt !important;
+                color: #000000 !important;
+                margin-top: 2rem !important;
+            }
+            
+            .highlight-text {
+                background: none !important;
+                -webkit-text-fill-color: initial !important;
+                color: #000000 !important;
+            }
+            
+            .cover-subtitle {
+                color: #4b5563 !important;
+                text-shadow: none !important;
+            }
+            
+            blockquote,
+            table,
+            tr,
+            .info-card,
+            .diagram-container,
+            .widget-container,
+            .grid-card,
+            .timeline-item {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            
+            .info-card, 
+            blockquote, 
+            .diagram-container, 
+            .widget-container, 
+            .grid-card, 
+            .timeline-content {
+                background: #f8fafc !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+            }
+            
+            svg {
+                filter: grayscale(1) contrast(1.2) !important;
+            }
+            
+            .only-print {
+                display: block !important;
+            }
+            
+            .print-footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border-top: 1px solid #cbd5e1;
+                padding-top: 0.5cm;
+                font-size: 8pt;
+                color: #475569;
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .widget-inputs,
+            #calculate-btn {
+                display: none !important;
+            }
+            
+            .widget-grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            .widget-results {
+                background: transparent !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+            
+            .results-content.hidden {
+                display: block !important;
+            }
+            
+            .result-placeholder {
+                display: none !important;
+            }
+            
+            .bar-outer {
+                background: #e2e8f0 !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+            
+            .protein-bar { background: #475569 !important; }
+            .carb-bar { background: #64748b !important; }
+            .fat-bar { background: #94a3b8 !important; }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <!-- Progress Bar -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <!-- Header Navigation (Hidden in Print) -->
+    <header class="main-header no-print">
+        <div class="logo">
+            <i class="fa-solid fa-snowflake frost-icon-animate"></i>
+            <span>MÉTODO <span>CONGELACIÓN</span></span>
+        </div>
+        <div class="header-actions">
+            <button id="toggle-sidebar-btn" title="Tabla de Contenidos">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <button id="toggle-theme-btn" title="Alternar Modo Claro/Oscuro">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+            <button id="toggle-preview-btn" title="Vista Previa de PDF">
+                <i class="fa-solid fa-file-pdf"></i> Vista PDF
+            </button>
+            <button id="print-pdf-btn" class="btn-primary" title="Exportar a PDF">
+                <i class="fa-solid fa-download"></i> Descargar PDF
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar / Navigation Drawer (Hidden in Print) -->
+    <aside id="sidebar" class="sidebar no-print">
+        <div class="sidebar-header">
+            <h3>Contenido</h3>
+            <button id="close-sidebar-btn">&times;</button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="#portada" class="nav-link active"><i class="fa-solid fa-book-open"></i> Portada</a></li>
+                <li><a href="#introduccion" class="nav-link"><i class="fa-solid fa-circle-info"></i> Introducción</a></li>
+                <li><a href="#capitulo1" class="nav-link"><i class="fa-solid fa-flask"></i> Cap. 1: La Ciencia del Frío</a></li>
+                <li><a href="#capitulo2" class="nav-link"><i class="fa-solid fa-boxes-stacked"></i> Cap. 2: El Sistema de las 3C</a></li>
+                <li><a href="#capitulo3" class="nav-link"><i class="fa-solid fa-utensils"></i> Cap. 3: Fórmulas de Ensamble</a></li>
+                <li><a href="#calculadora" class="nav-link"><i class="fa-solid fa-calculator"></i> Calculadora de Porciones</a></li>
+                <li><a href="#capitulo4" class="nav-link"><i class="fa-solid fa-calendar-check"></i> Cap. 4: Plan de 7 Días</a></li>
+                <li><a href="#conclusion" class="nav-link"><i class="fa-solid fa-flag-checkered"></i> Conclusión</a></li>
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <p>Complemento del Recetario +90 Platillos</p>
+        </div>
+    </aside>
+
+    <!-- Main Content Wrapper -->
+    <main class="content-container">
+
+        <!-- PORTADA -->
+        <section id="portada" class="ebook-page cover-section">
+            <div class="cover-glow-bg"></div>
+            <div class="cover-content">
+                <span class="cover-subtitle">EL COMPLEMENTO CIENTÍFICO INDISPENSABLE</span>
+                <h1 class="cover-title">EL CÓDIGO DE LA<br><span class="highlight-text">CONGELACIÓN</span></h1>
+                <p class="cover-tagline">El revolucionario método para perder peso, reprogramar tu metabolismo y liberar tu tiempo usando el poder de tu congelador.</p>
+                
+                <!-- Fallback CSS illustration of a futuristic refrigerator / ice portal -->
+                <div class="cover-illustration-fallback">
+                    <div class="ice-portal">
+                        <div class="portal-ring"></div>
+                        <div class="portal-ring ring-2"></div>
+                        <div class="portal-ring ring-3"></div>
+                        <div class="portal-core">
+                            <i class="fa-solid fa-snowflake core-frost"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="cover-meta">
+                    <p class="author">Por Antigravity Wellness Lab</p>
+                    <p class="guide-note"><i class="fa-solid fa-book"></i> Manual del Método &bull; Sin Recetas Complejas</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTRODUCCIÓN -->
+        <section id="introduccion" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">INTRODUCCIÓN</span>
+                <h2 class="chapter-title">La Trampa de la Cocina Diaria y la Pérdida de Peso</h2>
+            </div>
+            
+            <div class="chapter-body">
+                <p class="lead">¿Cuántas veces has comenzado una dieta con entusiasmo el lunes, solo para terminar pidiendo comida a domicilio el jueves por la noche?</p>
+                
+                <p>El verdadero enemigo de la pérdida de peso no es tu falta de fuerza de voluntad. Tampoco es que los carbohidratos sean inherentemente malos o que tu genética esté maldita. El verdadero culpable es <strong>la fatiga de decisión</strong> unida a la fricción de la cocina diaria.</p>
+
+                <blockquote>
+                    "La fuerza de voluntad es un recurso limitado. Cada vez que tienes que decidir qué comer, buscar los ingredientes, cocinar y lavar los platos bajo los efectos del estrés del trabajo, tu cerebro busca la ruta de menor resistencia. Y esa ruta rara vez es una ensalada."
+                </blockquote>
+
+                <p>Cocinar todos los días requiere energía mental. Cuando llegas a casa cansado, tu cerebro racional es secuestrado por tu cerebro reptiliano, el cual demanda energía rápida (azúcares y grasas simples). Aquí es donde entra <strong>El Método de la Congelación</strong>.</p>
+                
+                <p>Este libro no contiene recetas. Este libro es el <strong>manual estratégico</strong> que te enseña a utilizar la congelación de platillos estructurados como un biohack para perder peso sin esfuerzo consciente. Es el complemento conceptual perfecto para nuestro <em>Recetario de +90 Platillos para Congelar</em>. Aquí aprenderás el "por qué" y el "cómo" del sistema que reprogramará tu relación con la comida y el tiempo.</p>
+
+                <div class="info-card">
+                    <div class="info-card-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="info-card-content">
+                        <h4>La Regla de Cero Fricción</h4>
+                        <p>Al tener platos saludables listos en el congelador, reduces el tiempo de preparación de 45 minutos a solo 5 minutos en el microondas. Has igualado la velocidad de la comida rápida tradicional, pero con nutrición óptima.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 1 -->
+        <section id="capitulo1" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">CAPÍTULO 1</span>
+                <h2 class="chapter-title">La Ciencia del Frío: Almidón Resistente y Metabolismo</h2>
+            </div>
+
+            <div class="chapter-body">
+                <p class="lead">Congelar comida no es solo una forma de conservación; es un proceso químico que puede alterar radicalmente cómo tu cuerpo procesa los calorías.</p>
+                
+                <h3>El Gran Descubrimiento: Almidón Resistente (Retrogradación)</h3>
+                <p>Cuando cocinas carbohidratos comunes como el arroz, las patatas, la pasta o las legumbres, las moléculas de almidón absorben agua y se expanden, haciéndose extremadamente fáciles de digerir para tu cuerpo. Esto provoca picos rápidos de glucosa e insulina en sangre, lo que detiene la quema de grasa y genera hambre al poco tiempo.</p>
+
+                <p>Sin embargo, cuando estos mismos alimentos se enfrían a temperaturas de refrigeración o congelación y se mantienen allí por un periodo de tiempo, ocurre un proceso mágico llamado <strong>retrogradación del almidón</strong>. Las cadenas de amilosa y amilopectina se reordenan en una estructura cristalina compacta que las enzimas digestivas humanas ya no pueden romper.</p>
+
+                <div class="diagram-container">
+                    <div class="diagram-title"><i class="fa-solid fa-microscope"></i> Efecto del Frío en el Almidón</div>
+                    <!-- Inline SVG scientific diagram -->
+                    <svg viewBox="0 0 600 220" class="science-svg">
+                        <!-- BG grid lines -->
+                        <line x1="50" y1="20" x2="550" y2="20" stroke="var(--border-color)" stroke-dasharray="4"/>
+                        <line x1="50" y1="110" x2="550" y2="110" stroke="var(--border-color)" stroke-dasharray="4"/>
+                        <line x1="50" y1="200" x2="550" y2="200" stroke="var(--border-color)" stroke-dasharray="4"/>
+                        
+                        <!-- Fresh Starch (Left) -->
+                        <g transform="translate(100, 110)">
+                            <circle cx="0" cy="0" r="45" fill="rgba(255, 88, 88, 0.1)" stroke="var(--coral)" stroke-width="2"/>
+                            <!-- Loose molecules -->
+                            <path d="M-20,-20 Q-10,-30 0,-15 T20,-20" fill="none" stroke="var(--coral)" stroke-width="3"/>
+                            <path d="M-25,10 Q-5,0 15,15 T25,-5" fill="none" stroke="var(--coral)" stroke-width="3"/>
+                            <text x="0" y="70" class="svg-text" text-anchor="middle">Almidón Caliente (Normal)</text>
+                            <text x="0" y="85" class="svg-text-sub" text-anchor="middle">Rápida digestión &rarr; Pico de Insulina</text>
+                        </g>
+
+                        <!-- Arrow -->
+                        <g transform="translate(300, 110)">
+                            <line x1="-40" y1="0" x2="40" y2="0" stroke="var(--neon-cyan)" stroke-width="3" marker-end="url(#arrow)"/>
+                            <text x="0" y="-15" class="svg-text highlight" text-anchor="middle">CONGELACIÓN / FRÍO</text>
+                            <path d="M-10,-5 L0,5 L10,-5" fill="none" stroke="var(--neon-cyan)" stroke-width="2"/>
+                            <text x="0" y="25" class="svg-text-sub" text-anchor="middle">Retrogradación</text>
+                        </g>
+
+                        <!-- Resistant Starch (Right) -->
+                        <g transform="translate(500, 110)">
+                            <circle cx="0" cy="0" r="45" fill="rgba(0, 242, 254, 0.1)" stroke="var(--neon-cyan)" stroke-width="2"/>
+                            <!-- Compact crystal molecules -->
+                            <g stroke="var(--neon-cyan)" stroke-width="3" fill="none">
+                                <line x1="-15" y1="-15" x2="15" y2="-15"/>
+                                <line x1="-15" y1="-5" x2="15" y2="-5"/>
+                                <line x1="-15" y1="5" x2="15" y2="5"/>
+                                <line x1="-15" y1="15" x2="15" y2="15"/>
+                                <line x1="-10" y1="-20" x2="-10" y2="20" stroke-width="1.5" stroke-dasharray="2"/>
+                                <line x1="10" y1="-20" x2="10" y2="20" stroke-width="1.5" stroke-dasharray="2"/>
+                            </g>
+                            <text x="0" y="70" class="svg-text" text-anchor="middle">Almidón Resistente</text>
+                            <text x="0" y="85" class="svg-text-sub" text-anchor="middle">Fibra prebiótica &rarr; Baja absorción</text>
+                        </g>
+                        
+                        <!-- Marker template -->
+                        <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--neon-cyan)"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+
+                <p>El almidón pasa a comportarse como **fibra soluble**. Esto tiene tres efectos metabólicos devastadores para la grasa corporal:</p>
+                
+                <ul class="science-list">
+                    <li><i class="fa-solid fa-shield-halved"></i> <strong>Menos Calorías Absorbidas:</strong> Dado que tu intestino delgado no puede romper el almidón resistente, este pasa directamente al intestino grueso. Absorberás aproximadamente entre un 30% y un 50% menos de calorías provenientes de esos carbohidratos en comparación con cuando estaban recién cocinados.</li>
+                    <li><i class="fa-solid fa-bacteria"></i> <strong>Súper Alimento para tu Microbiota:</strong> En el colon, las bacterias beneficiosas fermentan este almidón y producen <em>butirato</em>, un ácido graso de cadena corta que estimula la liberación de hormonas de la saciedad (GLP-1 y PYY) y reduce la inflamación sistémica.</li>
+                    <li><i class="fa-solid fa-chart-line-down"></i> <strong>Sensibilidad a la Insulina Mejorada:</strong> El consumo regular de almidón retrogradado reduce la respuesta insulínica de las comidas subsiguientes, ayudando a tu cuerpo a acceder más fácilmente a las reservas de grasa acumuladas para usarlas como energía.</li>
+                </ul>
+
+                <h3>El Control Psicológico: Sin Carga Cognitiva</h3>
+                <p>Además de la ventaja bioquímica, el método elimina la <strong>fatiga de decisión</strong>. Cada plato congelado es una decisión que ya tomaste cuando estabas tranquilo, saciado y racional. Al retirar la improvisación, bloqueas los antojos impulsivos de la tarde.</p>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 2 -->
+        <section id="capitulo2" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">CAPÍTULO 2</span>
+                <h2 class="chapter-title">El Sistema de las 3C: Compra, Contenedores y Congelación</h2>
+            </div>
+
+            <div class="chapter-body">
+                <p class="lead">Congelar comida con éxito para perder peso requiere un sistema riguroso. No se trata simplemente de meter las sobras en un recipiente de plástico viejo.</p>
+
+                <h3>1. Compra Inteligente y por Bloques</h3>
+                <p>La eficiencia comienza en el supermercado. El método requiere comprar ingredientes en grandes volúmenes para optimizar el tiempo de cocción (Batch Cooking). La clave es comprar proteínas magras, vegetales densos que resistan la congelación y carbohidratos con alto índice de amilosa (como el arroz basmati o las patatas rojas) que cristalicen bien al enfriarse.</p>
+
+                <h3>2. Contenedores de Cristal Templado: La Regla de Oro</h3>
+                <p>Olvídate de los tuppers de plástico baratos. Para que este sistema funcione y sea saludable, debes usar contenedores de <strong>vidrio borosilicatado (cristal templado)</strong> con tapa hermética de silicona. Las razones son fundamentales:</p>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Característica</th>
+                                <th>Contenedor de Vidrio</th>
+                                <th>Contenedor de Plástico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Seguridad Térmica</strong></td>
+                                <td class="highlight-green">Excelente (Soporta del congelador al horno)</td>
+                                <td class="highlight-red">Pobre (Riesgo de deformación)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Bisfenoles y Microplásticos</strong></td>
+                                <td class="highlight-green">Cero transferencia química</td>
+                                <td class="highlight-red">Liberación de disruptores endocrinos al calentar</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Conservación de Sabor</strong></td>
+                                <td class="highlight-green">No absorbe olores ni manchas</td>
+                                <td class="highlight-red">Retiene grasa y olores residuales</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Durabilidad</strong></td>
+                                <td class="highlight-green">Años de uso continuo</td>
+                                <td class="highlight-red">Se deteriora y raya rápidamente</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>3. La Técnica de Congelación Rápida</h3>
+                <p>Para evitar que los alimentos pierdan su textura original y se vuelvan pastosos al descongelar, debes evitar la formación de grandes cristales de hielo. Sigue estos pasos:</p>
+                <ol class="steps-list">
+                    <li><strong>Enfriamiento Express:</strong> Nunca metas la comida caliente directamente en el congelador. Deja que baje a temperatura ambiente y luego refrigérala durante al menos 4 horas. Esto inicia la retrogradación del almidón y previene que el congelador suba de temperatura interna.</li>
+                    <li><strong>Eliminación del Aire:</strong> Si usas bolsas de congelación para ciertos elementos, extrae todo el aire posible. Si usas contenedores de cristal, llénalos dejando exactamente 1.5 cm de espacio en la parte superior para permitir la expansión sin romper el vidrio.</li>
+                    <li><strong>Etiquetado Sistemático:</strong> Rotula siempre con cinta de carrocero y rotulador permanente indicando: <em>Plato, Fecha de preparación y Macros estimados</em>.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 3 -->
+        <section id="capitulo3" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">CAPÍTULO 3</span>
+                <h2 class="chapter-title">La Regla de Ensamble: Estructura tu Contenedor de Pérdida de Peso</h2>
+            </div>
+
+            <div class="chapter-body">
+                <p class="lead">Este libro no te dará recetas cerradas; en su lugar, te dará el <strong>algoritmo de composición</strong>. Con esta fórmula, podrás estructurar cualquiera de las recetas de nuestro recetario de +90 platos o crear las tuyas propias garantizando la pérdida de grasa.</p>
+
+                <p>Cada contenedor individual de tu congelador debe seguir la siguiente estructura física y nutricional exacta:</p>
+
+                <div class="diagram-container">
+                    <div class="diagram-title"><i class="fa-solid fa-chart-pie"></i> Anatomía del Contenedor de Pérdida de Grasa</div>
+                    <!-- Inline SVG plate structure -->
+                    <svg viewBox="0 0 600 240" class="science-svg">
+                        <!-- Container border -->
+                        <rect x="180" y="20" width="240" height="150" rx="15" fill="none" stroke="var(--border-color)" stroke-width="4"/>
+                        <rect x="175" y="15" width="250" height="160" rx="20" fill="none" stroke="var(--neon-cyan)" stroke-width="1" stroke-dasharray="5"/>
+                        
+                        <!-- 50% Vegetables (Left Half) -->
+                        <path d="M 180,35 A 15,15 0 0,1 195,20 L 300,20 L 300,170 L 195,170 A 15,15 0 0,1 180,155 Z" fill="rgba(0, 242, 254, 0.15)"/>
+                        <text x="240" y="85" class="svg-text highlight" text-anchor="middle">50% VERDURAS</text>
+                        <text x="240" y="105" class="svg-text-sub" text-anchor="middle">Fibra y Micronutrientes</text>
+                        <text x="240" y="125" class="svg-text-sub" text-anchor="middle">Baja Densidad Calórica</text>
+                        
+                        <!-- Divider Line -->
+                        <line x1="300" y1="20" x2="300" y2="170" stroke="var(--border-color)" stroke-width="3"/>
+
+                        <!-- 25% Protein (Top Right) -->
+                        <path d="M 300,20 L 405,20 A 15,15 0 0,1 420,35 L 420,95 L 300,95 Z" fill="rgba(255, 88, 88, 0.15)"/>
+                        <text x="360" y="50" class="svg-text" text-anchor="middle" fill="var(--coral)">25% PROTEÍNA</text>
+                        <text x="360" y="65" class="svg-text-sub" text-anchor="middle">Saciedad y Músculo</text>
+
+                        <!-- Divider Line Horizontal -->
+                        <line x1="300" y1="95" x2="420" y2="95" stroke="var(--border-color)" stroke-width="3"/>
+
+                        <!-- 25% Resistant Carbs (Bottom Right) -->
+                        <path d="M 300,95 L 420,95 L 420,155 A 15,15 0 0,1 405,170 L 300,170 Z" fill="rgba(127, 0, 255, 0.15)"/>
+                        <text x="360" y="125" class="svg-text" text-anchor="middle" fill="#a78bfa">25% CARB. RETRÓGRADO</text>
+                        <text x="360" y="140" class="svg-text-sub" text-anchor="middle">Energía de absorción lenta</text>
+                    </svg>
+                </div>
+
+                <h3>Los 3 Componentes Clave:</h3>
+                
+                <div class="grid-3">
+                    <div class="grid-card">
+                        <div class="grid-card-icon"><i class="fa-solid fa-leaf"></i></div>
+                        <h4>50% Verduras del Frío</h4>
+                        <p>Vegetales que mantengan su consistencia y aporten agua e hidratación. Excelentes opciones: brócoli, espárragos, pimientos, ejotes (judías verdes), zanahoria y calabacín. Aportan volumen físico al estómago sin apenas calorías.</p>
+                    </div>
+                    <div class="grid-card">
+                        <div class="grid-card-icon"><i class="fa-solid fa-egg"></i></div>
+                        <h4>25% Proteínas Estables</h4>
+                        <p>La proteína protege tu masa muscular e incrementa el gasto metabólico digestivo (efecto térmico). Úsese pechuga de pollo, lomo de cerdo magro, ternera picada, pescados firmes (salmón, atún) o tofu firme. Evita salsas cremosas con alto contenido graso.</p>
+                    </div>
+                    <div class="grid-card">
+                        <div class="grid-card-icon"><i class="fa-solid fa-wheat-awn"></i></div>
+                        <h4>25% Carb Retrogradado</h4>
+                        <p>La porción energética. Arroz integral, arroz basmati, lentejas cocidas, garbanzos, patatas o camotes (batatas) cortados en cubos. Deben ser cocinados previamente, dejados enfriar y luego integrados en el contenedor.</p>
+                    </div>
+                </div>
+
+                <div class="info-card warning-card">
+                    <div class="info-card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div class="info-card-content">
+                        <h4>Atención con el Descongelamiento</h4>
+                        <p>Para calentar la comida y mantener la estructura del almidón resistente, no la sobrecalientes. Caliéntala a temperatura media-baja en el microondas o pásala a una sartén por pocos minutos. Si la calientas a temperaturas extremas de forma prolongada, el almidón resistente puede volver a convertirse en almidón simple de rápida absorción.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALCULADORA INTERACTIVA -->
+        <section id="calculadora" class="ebook-page widget-section no-break">
+            <div class="widget-container">
+                <div class="widget-header">
+                    <i class="fa-solid fa-calculator calculator-icon"></i>
+                    <h2>Calculadora de Contenedores y Macros</h2>
+                    <p>Calcula tus requerimientos diarios y la cantidad de contenedores semanales óptimos para tu pérdida de peso.</p>
+                </div>
+                
+                <div class="widget-grid">
+                    <div class="widget-inputs">
+                        <div class="input-group">
+                            <label for="calc-weight">Peso actual (kg):</label>
+                            <input type="number" id="calc-weight" value="75" min="40" max="200">
+                        </div>
+                        <div class="input-group">
+                            <label for="calc-goal">Objetivo de peso:</label>
+                            <select id="calc-goal">
+                                <option value="lose">Pérdida de Grasa Definida (Déficit Moderado)</option>
+                                <option value="lose-fast">Pérdida Rápida (Solo recomendada a corto plazo)</option>
+                                <option value="maintain">Mantenimiento y Recomposición Corporal</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="calc-activity">Nivel de Actividad Física:</label>
+                            <select id="calc-activity">
+                                <option value="sedentary">Sedentario (Trabajo de oficina, poco ejercicio)</option>
+                                <option value="light">Actividad Ligera (1-3 días de ejercicio ligero/semana)</option>
+                                <option value="active">Activo (4-5 días de ejercicio intenso/semana)</option>
+                            </select>
+                        </div>
+                        <button id="calculate-btn" class="btn-primary btn-block">Calcular Plan de Congelación</button>
+                    </div>
+
+                    <div class="widget-results" id="widget-results">
+                        <div class="result-placeholder">
+                            <i class="fa-solid fa-chart-bar"></i>
+                            <p>Introduce tus datos y haz clic en calcular para ver tu plan personalizado.</p>
+                        </div>
+                        <div class="results-content hidden">
+                            <div class="calories-badge">
+                                <span class="badge-label">Tus Calorías de Pérdida de Peso:</span>
+                                <span class="badge-value" id="res-calories">1650 kcal</span>
+                            </div>
+                            
+                            <h4>Distribución por Contenedor (Promedio):</h4>
+                            <div class="macro-bars">
+                                <div class="macro-bar-item">
+                                    <div class="macro-header">
+                                        <span>Proteína</span>
+                                        <span id="res-protein">110g</span>
+                                    </div>
+                                    <div class="bar-outer"><div class="bar-inner protein-bar" style="width: 30%;"></div></div>
+                                </div>
+                                <div class="macro-bar-item">
+                                    <div class="macro-header">
+                                        <span>Carbohidrato Resistente</span>
+                                        <span id="res-carbs">130g</span>
+                                    </div>
+                                    <div class="bar-outer"><div class="bar-inner carb-bar" style="width: 40%;"></div></div>
+                                </div>
+                                <div class="macro-bar-item">
+                                    <div class="macro-header">
+                                        <span>Grasas Saludables / Verduras</span>
+                                        <span id="res-fats">55g</span>
+                                    </div>
+                                    <div class="bar-outer"><div class="bar-inner fat-bar" style="width: 30%;"></div></div>
+                                </div>
+                            </div>
+
+                            <div class="prep-guide-box">
+                                <h5><i class="fa-solid fa-snowflake"></i> Recomendación de Batch Cooking:</h5>
+                                <p id="res-prep-text">Para cubrir tu semana, te recomendamos preparar <strong>10 contenedores</strong> basados en la fórmula de ensamble. El resto de comidas pueden ser desayunos o meriendas ligeras no congelables.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAPÍTULO 4 -->
+        <section id="capitulo4" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">CAPÍTULO 4</span>
+                <h2 class="chapter-title">El Plan de Acción de 7 Días: De Cero a un Congelador Fit</h2>
+            </div>
+
+            <div class="chapter-body">
+                <p class="lead">Para evitar la abrumación, implementaremos el método de manera gradual. Esta es la hoja de ruta para tu primera semana de transformación metabólica.</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 1</div>
+                        <div class="timeline-content">
+                            <h4>Auditoría del Congelador y Adquisición de Envases</h4>
+                            <p>Limpia a fondo tu congelador. Deshazte de productos ultraprocesados congelados (pizzas, helados, frituras). Mide los espacios libres y adquiere tus primeros 10 contenedores de vidrio herméticos borosilicatados de tamaño estándar (entre 700ml y 1000ml).</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 2</div>
+                        <div class="timeline-content">
+                            <h4>Diseño del Menú Semanal</h4>
+                            <p>Abre el <em>Recetario de +90 Platillos para Congelar</em>. Selecciona 3 recetas que compartan ingredientes base similares (por ejemplo, tres platos que usen pollo y arroz basmati). Esto ahorrará tiempo y dinero en la cocina.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 3</div>
+                        <div class="timeline-content">
+                            <h4>La Compra Inteligente y Pesado de Macros</h4>
+                            <p>Realiza la compra enfocándote únicamente en los ingredientes de las recetas elegidas. Compra bolsas de verduras precortadas si quieres reducir el tiempo de picado a cero.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 4</div>
+                        <div class="timeline-content">
+                            <h4>Día de Batch Cooking y Enfriamiento</h4>
+                            <p>Dedica 2 horas a cocinar en paralelo. Cocina todas las proteínas y carbohidratos. Deja reposar los carbohidratos en la encimera. Arma los contenedores siguiendo la <strong>Regla de Ensamble (50/25/25)</strong>. Refrigera durante toda la noche.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 5</div>
+                        <div class="timeline-content">
+                            <h4>La Gran Congelación</h4>
+                            <p>Por la mañana, traslada los contenedores del refrigerador al congelador. La retrogradación del almidón se habrá completado con éxito durante las horas previas de frío. ¡Tu inventario de energía ya está listo!</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-badge">Día 6-7</div>
+                        <div class="timeline-content">
+                            <h4>Ejecución y Testeo de Rutina</h4>
+                            <p>Consume tu primer platillo descongelado. Ajusta el tiempo de calentado en tu microondas. Experimenta la maravillosa sensación de tener el almuerzo y la cena listos en 5 minutos y no tener platos que lavar más allá del contenedor de vidrio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCLUSIÓN -->
+        <section id="conclusion" class="ebook-page chapter-section">
+            <div class="chapter-header">
+                <span class="chapter-number">CONCLUSIÓN</span>
+                <h2 class="chapter-title">Tu Nueva Libertad Metabólica</h2>
+            </div>
+
+            <div class="chapter-body">
+                <p class="lead">Perder peso no consiste en sufrir. Consiste en diseñar un entorno donde sea más fácil tomar la decisión saludable que la perjudicial.</p>
+
+                <p>Al dominar el **Código de la Congelación**, has hackeado tres de las barreras más grandes del fitness moderno:</p>
+                <ul>
+                    <li><strong>La barrera del tiempo:</strong> Cocinas una o dos veces por semana, ahorrando hasta 10 horas semanales que ahora puedes dedicar a entrenar, descansar o disfrutar de tu familia.</li>
+                    <li><strong>La barrera metabólica:</strong> Con la magia del almidón resistente y el control de porciones implícito, disminuyes la absorción calórica y los antojos de forma biológica, no con fuerza de voluntad.</li>
+                    <li><strong>La barrera económica:</strong> Reduces el desperdicio de comida a cero y evitas las costosas compras de última hora en aplicaciones de delivery.</li>
+                </ul>
+
+                <p>Estás listo para usar el <em>Recetario de +90 Platillos</em> no como una lista de tareas estresante, sino como tu menú personal de soluciones de alta tecnología nutricional.</p>
+
+                <p class="signature">¡Que el frío esté de tu lado!</p>
+
+                <div class="final-book-promo no-print">
+                    <div class="promo-content">
+                        <h3>¿Listo para empezar a cocinar?</h3>
+                        <p>Abre ahora tu <strong>Recetario de +90 Recetas para Congelar</strong> y empieza a armar tu planificador interactivo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer (Only shown in print) -->
+    <footer class="print-footer only-print">
+        <div class="print-footer-content">
+            <span>El Código de la Congelación — Antigravity Wellness Lab</span>
+            <span class="page-number-placeholder">Página </span>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE CONTROLLER LOGIC -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            /* ==========================================================================
+               DOM ELEMENTS
+               ========================================================================== */
+            const progressBar = document.getElementById('progress-bar');
+            const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebar = document.getElementById('sidebar');
+            const toggleThemeBtn = document.getElementById('toggle-theme-btn');
+            const togglePreviewBtn = document.getElementById('toggle-preview-btn');
+            const printPdfBtn = document.getElementById('print-pdf-btn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            // Calculator DOM Elements
+            const calcWeight = document.getElementById('calc-weight');
+            const calcGoal = document.getElementById('calc-goal');
+            const calcActivity = document.getElementById('calc-activity');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultPlaceholder = document.querySelector('.result-placeholder');
+            const resultsContent = document.querySelector('.results-content');
+            const resCalories = document.getElementById('res-calories');
+            const resProtein = document.getElementById('res-protein');
+            const resCarbs = document.getElementById('res-carbs');
+            const resFats = document.getElementById('res-fats');
+            const resPrepText = document.getElementById('res-prep-text');
+
+            /* ==========================================================================
+               THEME TOGGLE (LIGHT / DARK)
+               ========================================================================== */
+            toggleThemeBtn.addEventListener('click', () => {
+                const isDarkMode = document.body.classList.toggle('dark-mode');
+                document.body.classList.toggle('light-mode', !isDarkMode);
+                
+                // Update icon
+                const icon = toggleThemeBtn.querySelector('i');
+                if (isDarkMode) {
+                    icon.className = 'fa-solid fa-moon';
+                    toggleThemeBtn.title = 'Alternar Modo Claro';
+                } else {
+                    icon.className = 'fa-solid fa-sun';
+                    toggleThemeBtn.title = 'Alternar Modo Oscuro';
+                }
+            });
+
+            /* ==========================================================================
+               SIDEBAR TOGGLE (OPEN / CLOSE)
+               ========================================================================== */
+            const toggleSidebar = () => {
+                sidebar.classList.toggle('open');
+            };
+
+            toggleSidebarBtn.addEventListener('click', toggleSidebar);
+            closeSidebarBtn.addEventListener('click', toggleSidebar);
+
+            // Close sidebar on link click (only on mobile)
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1200) {
+                        sidebar.classList.remove('open');
+                    }
+                });
+            });
+
+            /* ==========================================================================
+               READING PROGRESS & ACTIVE SECTION HIGHLIGHTING
+               ========================================================================== */
+            window.addEventListener('scroll', () => {
+                // Calculate reading progress
+                const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+                progressBar.style.width = scrolled + '%';
+
+                // Highlight current section in navigation
+                let currentSectionId = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    if (window.scrollY >= sectionTop - 150) {
+                        currentSectionId = section.getAttribute('id');
+                    }
+                });
+
+                if (currentSectionId) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${currentSectionId}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+
+            /* ==========================================================================
+               PDF PREVIEW & PRINTING
+               ========================================================================== */
+            togglePreviewBtn.addEventListener('click', () => {
+                const isPreview = document.body.classList.toggle('pdf-preview-mode');
+                
+                if (isPreview) {
+                    togglePreviewBtn.innerHTML = '<i class="fa-solid fa-book-open"></i> Vista Web';
+                    togglePreviewBtn.title = 'Volver al Lector Digital';
+                    document.body.classList.remove('dark-mode');
+                    document.body.classList.add('light-mode');
+                    toggleThemeBtn.style.display = 'none';
+                } else {
+                    togglePreviewBtn.innerHTML = '<i class="fa-solid fa-file-pdf"></i> Vista PDF';
+                    togglePreviewBtn.title = 'Vista Previa de PDF';
+                    document.body.classList.remove('light-mode');
+                    document.body.classList.add('dark-mode');
+                    const icon = toggleThemeBtn.querySelector('i');
+                    icon.className = 'fa-solid fa-moon';
+                    toggleThemeBtn.style.display = 'inline-flex';
+                }
+                
+                window.scrollTo(0, 0);
+            });
+
+            printPdfBtn.addEventListener('click', () => {
+                window.print();
+            });
+
+            /* ==========================================================================
+               CALCULATOR LOGIC
+               ========================================================================== */
+            const runCalculation = () => {
+                const weight = parseFloat(calcWeight.value);
+                const goal = calcGoal.value;
+                const activity = calcActivity.value;
+
+                if (isNaN(weight) || weight <= 0) {
+                    alert('Por favor introduce un peso válido.');
+                    return;
+                }
+
+                const bmr = weight * 22;
+
+                let tdee = bmr;
+                if (activity === 'sedentary') {
+                    tdee = bmr * 1.2;
+                } else if (activity === 'light') {
+                    tdee = bmr * 1.35;
+                } else if (activity === 'active') {
+                    tdee = bmr * 1.55;
+                }
+
+                let dailyCalories = tdee;
+                if (goal === 'lose') {
+                    dailyCalories = tdee - 450;
+                } else if (goal === 'lose-fast') {
+                    dailyCalories = tdee - 700;
+                } else if (goal === 'maintain') {
+                    dailyCalories = tdee;
+                }
+
+                if (dailyCalories < 1200) {
+                    dailyCalories = 1200;
+                }
+
+                const calories = Math.round(dailyCalories);
+
+                const proteinGrams = Math.round(weight * 2.0);
+                const proteinKcal = proteinGrams * 4;
+
+                const fatKcal = calories * 0.30;
+                const fatGrams = Math.round(fatKcal / 9);
+
+                const carbKcal = calories - proteinKcal - fatKcal;
+                let carbGrams = Math.round(carbKcal / 4);
+                if (carbGrams < 50) carbGrams = 50;
+
+                let weeklyContainers = 10;
+                if (calories > 1800) {
+                    weeklyContainers = 12;
+                }
+                if (calories > 2200) {
+                    weeklyContainers = 14;
+                }
+
+                resCalories.textContent = `${calories} kcal`;
+                resProtein.textContent = `${proteinGrams}g`;
+                resCarbs.textContent = `${carbGrams}g`;
+                resFats.textContent = `${fatGrams}g`;
+
+                const totalGrams = proteinGrams + carbGrams + fatGrams;
+                document.querySelector('.protein-bar').style.width = `${(proteinGrams / totalGrams) * 100}%`;
+                document.querySelector('.carb-bar').style.width = `${(carbGrams / totalGrams) * 100}%`;
+                document.querySelector('.fat-bar').style.width = `${(fatGrams / totalGrams) * 100}%`;
+
+                resPrepText.innerHTML = `Para tu objetivo, te recomendamos preparar <strong>${weeklyContainers} contenedores de vidrio</strong> semanales divididos en 2 recetas base del recetario de +90 platos (por ejemplo: 6 contenedores de <em>Pollo al Limón con Arroz Basmati Retrogradado</em> y ${weeklyContainers - 6} contenedores de <em>Lomo Teriyaki con Brócoli y Garbanzo</em>). Esto te garantiza el 80% de tus comidas resueltas sin estrés.`;
+
+                resultPlaceholder.classList.add('hidden');
+                resultsContent.classList.remove('hidden');
+            };
+
+            calculateBtn.addEventListener('click', runCalculation);
+
+            runCalculation();
+        });
+    </script>
+</body>
+</html>
