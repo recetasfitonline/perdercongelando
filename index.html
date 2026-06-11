@@ -1526,6 +1526,46 @@
                 padding: 2rem 1.5rem;
             }
         }
+        
+        /* Instructions in login gate */
+        .login-instructions-note {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem !important;
+            color: var(--text-secondary) !important;
+            line-height: 1.4 !important;
+            margin-bottom: 1.5rem !important;
+            text-align: left;
+        }
+        .login-instructions-note strong {
+            color: var(--neon-cyan);
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Print warning button container and warning text */
+        .print-button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .print-recommendation-note {
+            font-size: 0.65rem;
+            color: var(--coral);
+            opacity: 0.85;
+            margin-top: 4px;
+            text-align: right;
+            line-height: 1.25;
+            max-width: 200px;
+        }
+        @media (max-width: 768px) {
+            .print-recommendation-note {
+                display: none; /* Hide warning on mobile to keep header clean */
+            }
+        }
         }
     </style>
 </head>
@@ -1540,6 +1580,10 @@
             </div>
             <h2>Acceso Exclusivo</h2>
             <p>Introduce tu clave de comprador para desbloquear el ebook.</p>
+            <p class="login-instructions-note">
+                La contraseña está en el PDF que viste antes. Si no la recuerdas, vuelve a verla y regresa.<br>
+                <strong>Recomendamos que la escribas a mano si tienes problemas.</strong>
+            </p>
             <div class="input-group">
                 <input type="password" id="login-password" placeholder="Introduce la contraseña" autocomplete="current-password">
                 <i class="fa-solid fa-lock input-icon"></i>
@@ -1572,9 +1616,12 @@
             <button id="toggle-preview-btn" title="Vista Previa de PDF">
                 <i class="fa-solid fa-file-pdf"></i> <span class="btn-text">Vista PDF</span>
             </button>
-            <button id="print-pdf-btn" class="btn-primary" title="Exportar a PDF">
-                <i class="fa-solid fa-download"></i> <span class="btn-text">Descargar PDF</span>
-            </button>
+            <div class="print-button-container">
+                <button id="print-pdf-btn" class="btn-primary" title="Exportar a PDF">
+                    <i class="fa-solid fa-download"></i> <span class="btn-text">Descargar PDF</span>
+                </button>
+                <span class="print-recommendation-note no-print">Recomendamos no hacerlo; es mejor ver el contenido desde el sistema.</span>
+            </div>
         </div>
     </header>
 
@@ -2049,9 +2096,12 @@
         <button id="exit-preview-btn" class="btn-primary" title="Volver al Lector Digital">
             <i class="fa-solid fa-arrow-left"></i> Volver a Vista Web
         </button>
-        <button id="print-preview-btn" class="btn-secondary" title="Descargar como archivo PDF">
-            <i class="fa-solid fa-download"></i> Guardar PDF
-        </button>
+        <div class="print-button-container">
+            <button id="print-preview-btn" class="btn-secondary" title="Descargar como archivo PDF">
+                <i class="fa-solid fa-download"></i> Guardar PDF
+            </button>
+            <span class="print-recommendation-note">Recomendamos no hacerlo; es mejor ver el contenido desde el sistema.</span>
+        </div>
     </div>
 
     <!-- Footer (Only shown in print) -->
@@ -2088,7 +2138,7 @@
             checkUnlock();
 
             const attemptUnlock = () => {
-                const password = loginPassword.value;
+                const password = loginPassword.value.toLowerCase().trim();
                 if (password === 'congelar123') {
                     localStorage.setItem('ebook_unlocked', 'true');
                     loginError.classList.add('hidden');
